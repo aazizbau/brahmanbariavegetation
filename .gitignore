@@ -10,6 +10,9 @@ __pycache__/
 .idea/
 .vscode/
 .DS_Store
+map/*.gpkg
+map/*.shp
+map/*.qgz
 
 # Environment & secrets
 .env
@@ -21,11 +24,12 @@ data/interim/*
 data/processed/*
 data/external/*
 reports/figures/*
+map/*
 !data/**/.gitkeep
 !reports/figures/.gitkeep
+!map/.gitkeep
 
 # Build and distribution
 build/
 dist/
 *.egg-info/
-
