@@ -1,0 +1,31 @@
+.venv/
+__pycache__/
+*.py[cod]
+*.so
+.Python
+.ipynb_checkpoints/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.idea/
+.vscode/
+.DS_Store
+
+# Environment & secrets
+.env
+.env.*
+
+# Data and generated artifacts (keep folder structure via .gitkeep)
+data/raw/*
+data/interim/*
+data/processed/*
+data/external/*
+reports/figures/*
+!data/**/.gitkeep
+!reports/figures/.gitkeep
+
+# Build and distribution
+build/
+dist/
+*.egg-info/
+

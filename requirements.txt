@@ -1,0 +1,16 @@
+jupyter
+numpy
+pandas
+geopandas
+rasterio
+rioxarray
+xarray
+shapely
+pyproj
+matplotlib
+seaborn
+scikit-learn
+tqdm
+requests
+sentinelsat
+earthengine-api
