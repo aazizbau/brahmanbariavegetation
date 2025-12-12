@@ -37,6 +37,20 @@ pip install -r requirements.txt
 4) **Compute indices**: derive NDVI/EVI/SAVI and temporal composites; save rasters to `data/processed/`.
 5) **Analyze trends**: aggregate by season/year, generate plots/maps in notebooks, and export figures to `reports/figures/`.
 
+## Earth Engine helpers (examples)
+- Download tiled monthly composite (local GeoTIFFs, tiles sized in km):
+  ```bash
+  python src/data/download_gee_s2_composite.py --month october --year 2016 --collection l1c --scale 10 --tile-width-km 5 --tile-height-km 5 --tile-overlap-km 0.5 --output-dir data/raw/gee/tiles
+  ```
+- Check which tiles are present/missing:
+  ```bash
+  python src/data/check_download_gee_s2_composite.py --month october --year 2016 --tile-width-km 5 --tile-height-km 5 --tile-overlap-km 0.5 --output-dir data/raw/gee/tiles
+  ```
+- Download only missing tiles:
+  ```bash
+  python src/data/download_missing_gee_s2_composite.py --month october --year 2016 --collection l1c --scale 10 --tile-width-km 5 --tile-height-km 5 --tile-overlap-km 0.5 --output-dir data/raw/gee/tiles
+  ```
+
 ## Notes
 - Keep large rasters out of version control; `.gitignore` preserves folder structure via `.gitkeep`.
 - Prefer reproducible notebooks with clear parameters; extract reusable code into `src/`.
