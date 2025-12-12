@@ -54,6 +54,10 @@ pip install -r requirements.txt
   ```bash
   python src/preprocessing/mosaic_s2_composite.py --input-dir data/raw/gee/tiles --prefix s2_oct_2016 --year 2016 --month 10 --output data/interim/mosaic_s2.tif
   ```
+- Clip the mosaic to the Brahmanbaria AOI:
+  ```bash
+  python src/preprocessing/clip_mosaic_s2_composite.py --input data/interim/mosaic_s2_oct_2016.tif --vector map/brahmanbaria_gpkg.gpkg --output data/processed/mosaic_s2_oct_2016_clipped.tif
+  ```
 
 ## Notes
 - Keep large rasters out of version control; `.gitignore` preserves folder structure via `.gitkeep`.

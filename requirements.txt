@@ -4,6 +4,7 @@ pandas
 geopandas
 rasterio
 rioxarray
+fiona
 xarray
 shapely
 pyproj
