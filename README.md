@@ -50,6 +50,10 @@ pip install -r requirements.txt
   ```bash
   python src/data/download_missing_gee_s2_composite.py --month october --year 2016 --collection l1c --scale 10 --tile-width-km 5 --tile-height-km 5 --tile-overlap-km 0.5 --output-dir data/raw/gee/tiles
   ```
+- Mosaic downloaded tiles into a single GeoTIFF:
+  ```bash
+  python src/preprocessing/mosaic_s2_composite.py --input-dir data/raw/gee/tiles --prefix s2_oct_2016 --year 2016 --month 10 --output data/interim/mosaic_s2.tif
+  ```
 
 ## Notes
 - Keep large rasters out of version control; `.gitignore` preserves folder structure via `.gitkeep`.
