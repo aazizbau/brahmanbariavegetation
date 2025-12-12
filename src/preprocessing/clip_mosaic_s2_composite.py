@@ -49,13 +49,15 @@ def read_shapes(vector_path: Path, layer: str | None):
 
 def clip_raster(raster_path: Path, shapes, output_path: Path) -> None:
     with rasterio.open(raster_path) as src:
-        out_image, out_transform = mask(src, shapes, crop=True)
+        fill_value = src.nodata if src.nodata is not None else 0
+        out_image, out_transform = mask(src, shapes, crop=True, filled=True, nodata=fill_value)
         out_meta = src.meta.copy()
         out_meta.update(
             {
                 "height": out_image.shape[1],
                 "width": out_image.shape[2],
                 "transform": out_transform,
+                "nodata": fill_value,
             }
         )
     output_path.parent.mkdir(parents=True, exist_ok=True)
