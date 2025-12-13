@@ -58,6 +58,10 @@ pip install -r requirements.txt
   ```bash
   python src/preprocessing/clip_mosaic_s2_composite.py --input data/interim/mosaic_s2_oct_2016.tif --vector map/brahmanbaria_gpkg.gpkg --output data/processed/mosaic_s2_oct_2016_clipped.tif
   ```
+- Compute NDVI from the clipped mosaic:
+  ```bash
+  python src/indices/make_ndvi.py --input data/processed/mosaic_s2_oct_2016_clipped.tif --output data/processed/ndvi_mosaic_s2_oct_2016.tif
+  ```
 
 ## Notes
 - Keep large rasters out of version control; `.gitignore` preserves folder structure via `.gitkeep`.
