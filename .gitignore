@@ -33,3 +33,15 @@ map/*
 build/
 dist/
 *.egg-info/
+
+# Images and media
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff
+*.ico
+*.webp
+*.mp4
+*.mov

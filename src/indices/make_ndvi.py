@@ -26,6 +26,18 @@ def parse_args() -> argparse.Namespace:
         default="data/processed/ndvi_mosaic_s2_oct_2016.tif",
         help="Output NDVI GeoTIFF path. Default: data/processed/ndvi_mosaic_s2_oct_2016.tif",
     )
+    parser.add_argument(
+        "--red-band-index",
+        type=int,
+        default=None,
+        help="1-based band index for red. Default: inferred from descriptions or 3 (B4).",
+    )
+    parser.add_argument(
+        "--nir-band-index",
+        type=int,
+        default=None,
+        help="1-based band index for NIR. Default: inferred from descriptions or 7 (B8).",
+    )
     return parser.parse_args()
 
 
@@ -50,8 +62,20 @@ def main() -> None:
         raise SystemExit(f"Input raster not found: {in_path}")
 
     with rasterio.open(in_path) as src:
-        red = src.read(3)  # B4
-        nir = src.read(7)  # B8
+        # Band order from download pipeline: 1:B2, 2:B3, 3:B4, 4:B5, 5:B6, 6:B7, 7:B8, 8:B8A
+        # Prefer band descriptions if present to avoid indexing mistakes; allow override via args.
+        descriptions = [d or "" for d in src.descriptions]
+        if args.red_band_index and args.nir_band_index:
+            red_idx, nir_idx = args.red_band_index, args.nir_band_index
+        else:
+            try:
+                red_idx = descriptions.index("B4") + 1
+                nir_idx = descriptions.index("B8") + 1
+            except ValueError:
+                red_idx, nir_idx = 3, 7
+
+        red = src.read(red_idx)
+        nir = src.read(nir_idx)
         nodata = src.nodata
         nodata_mask = red == nodata if nodata is not None else None
         ndvi = compute_ndvi(red, nir, nodata_mask)
@@ -69,7 +93,12 @@ def main() -> None:
         with rasterio.open(out_path, "w", **profile) as dst:
             dst.write(ndvi.astype("float32"), 1)
 
-    print(f"Saved NDVI to {out_path}")
+    # Quick stats for sanity
+    valid = ndvi[np.isfinite(ndvi)]
+    print(
+        f"Saved NDVI to {out_path} | red band {red_idx} nir band {nir_idx} | "
+        f"ndvi min {valid.min() if valid.size else 'nan'} max {valid.max() if valid.size else 'nan'}"
+    )
 
 
 if __name__ == "__main__":

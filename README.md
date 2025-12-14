@@ -62,6 +62,31 @@ pip install -r requirements.txt
   ```bash
   python src/indices/make_ndvi.py --input data/processed/mosaic_s2_oct_2016_clipped.tif --output data/processed/ndvi_mosaic_s2_oct_2016.tif
   ```
+- Download a single date (tiled) Sentinel-2 scene:
+  ```bash
+  python src/data/download_gee_s2.py --date 2017-11-03 --scale 10 --tile-width-km 5 --tile-height-km 5 --tile-overlap-km 0.5 --output-dir data/raw/gee/s2_single
+  ```
+- Mosaic single-date tiles:
+  ```bash
+  python src/preprocessing/mosaic_s2.py --input-dir data/raw/gee/s2_single --prefix s2_20171103 --year 2017 --month 11 --day 3 --output data/interim/mosaic_s2_20171103.tif
+  ```
+- Clip single-date mosaic to AOI:
+  ```bash
+  python src/preprocessing/clip_s2.py --input data/interim/mosaic_s2_20171103.tif --vector map/brahmanbaria_gpkg.gpkg --output data/processed/mosaic_s2_20171103_clipped.tif
+  ```
+- Compute NDVI from separate band files:
+  ```bash
+  python src/indices/make_ndvi_image.py --year 2017 --date 20171103 --red map/2017/S2_20171103_B04_10m.tif --nir map/2017/S2_20171103_B08_10m.tif --output map/2017/ndvi_20171103.tif
+  ```
+- Compute EVI from separate band files:
+  ```bash
+  python src/indices/make_evi_image.py --year 2017 --date 20171103 --scale 1.0
+  ```
+- Clip NDVI/EVI to AOI:
+  ```bash
+  python src/indices/clip.py --input map/2017/ndvi_20171103.tif
+  # or any map/<year>/<metric>_<yyyymmdd>.tif
+  ```
 
 ## Notes
 - Keep large rasters out of version control; `.gitignore` preserves folder structure via `.gitkeep`.
