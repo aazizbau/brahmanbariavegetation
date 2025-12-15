@@ -37,42 +37,9 @@ pip install -r requirements.txt
 4) **Compute indices**: derive NDVI/EVI/SAVI and temporal composites; save rasters to `data/processed/`.
 5) **Analyze trends**: aggregate by season/year, generate plots/maps in notebooks, and export figures to `reports/figures/`.
 
-## Earth Engine helpers (examples)
-- Download tiled monthly composite (local GeoTIFFs, tiles sized in km):
+- Mosaic local SAFE band tiles with SCL masking:
   ```bash
-  python src/data/download_gee_s2_composite.py --month october --year 2016 --collection l1c --scale 10 --tile-width-km 5 --tile-height-km 5 --tile-overlap-km 0.5 --output-dir data/raw/gee/tiles
-  ```
-- Check which tiles are present/missing:
-  ```bash
-  python src/data/check_download_gee_s2_composite.py --month october --year 2016 --tile-width-km 5 --tile-height-km 5 --tile-overlap-km 0.5 --output-dir data/raw/gee/tiles
-  ```
-- Download only missing tiles:
-  ```bash
-  python src/data/download_missing_gee_s2_composite.py --month october --year 2016 --collection l1c --scale 10 --tile-width-km 5 --tile-height-km 5 --tile-overlap-km 0.5 --output-dir data/raw/gee/tiles
-  ```
-- Mosaic downloaded tiles into a single GeoTIFF:
-  ```bash
-  python src/preprocessing/mosaic_s2_composite.py --input-dir data/raw/gee/tiles --prefix s2_oct_2016 --year 2016 --month 10 --output data/interim/mosaic_s2.tif
-  ```
-- Clip the mosaic to the Brahmanbaria AOI:
-  ```bash
-  python src/preprocessing/clip_mosaic_s2_composite.py --input data/interim/mosaic_s2_oct_2016.tif --vector map/brahmanbaria_gpkg.gpkg --output data/processed/mosaic_s2_oct_2016_clipped.tif
-  ```
-- Compute NDVI from the clipped mosaic:
-  ```bash
-  python src/indices/make_ndvi.py --input data/processed/mosaic_s2_oct_2016_clipped.tif --output data/processed/ndvi_mosaic_s2_oct_2016.tif
-  ```
-- Download a single date (tiled) Sentinel-2 scene:
-  ```bash
-  python src/data/download_gee_s2.py --date 2017-11-03 --scale 10 --tile-width-km 5 --tile-height-km 5 --tile-overlap-km 0.5 --output-dir data/raw/gee/s2_single
-  ```
-- Mosaic single-date tiles:
-  ```bash
-  python src/preprocessing/mosaic_s2.py --input-dir data/raw/gee/s2_single --prefix s2_20171103 --year 2017 --month 11 --day 3 --output data/interim/mosaic_s2_20171103.tif
-  ```
-- Clip single-date mosaic to AOI:
-  ```bash
-  python src/preprocessing/clip_s2.py --input data/interim/mosaic_s2_20171103.tif --vector map/brahmanbaria_gpkg.gpkg --output data/processed/mosaic_s2_20171103_clipped.tif
+  python src/preprocessing/make_mosaic_image.py --year 2018 --band B02 --output map/2018/S2_20181128_B02_10m.tif
   ```
 - Compute NDVI from separate band files:
   ```bash
@@ -82,15 +49,33 @@ pip install -r requirements.txt
   ```bash
   python src/indices/make_evi_image.py --year 2017 --date 20171103 --scale 1.0
   ```
+- Compute GNDVI from separate band files:
+  ```bash
+  python src/indices/make_gndvi_image.py --year 2017 --date 20171103 --scale 1.0
+  ```
+- Compute CIgreen from separate band files:
+  ```bash
+  python src/indices/make_cigreen_image.py --year 2017 --date 20171103 --scale 1.0
+  ```
+- Compute MSAVI from separate band files:
+  ```bash
+  python src/indices/make_msavi_image.py --year 2017 --date 20171103 --scale 1.0
+  ```
 - Clip NDVI/EVI to AOI:
   ```bash
   python src/indices/clip.py --input map/2017/ndvi_20171103.tif
   # or any map/<year>/<metric>_<yyyymmdd>.tif
   ```
-- Mosaic local SAFE band tiles with SCL masking:
-  ```bash
-  python src/preprocessing/make_mosaic_image.py --year 2018 --band B02 --output map/2018/S2_20181128_B02_10m.tif
-  ```
+
+
+## Copernicus Data Space manual download (Sentinel-2)
+1) Open https://browser.dataspace.copernicus.eu/ and sign in (EU Login required).
+2) Define AOI: draw polygon or paste coordinates; slightly enlarge to cover edges.
+3) Collection: Sentinel-2 → Level-2A (Surface Reflectance), 10 m.
+4) Filters: set time range (e.g., 2018-01-01 to 2018-12-31) and cloud cover (typical 0–20%, monsoon ≤30%); search.
+5) Note all tile IDs covering AOI (e.g., T46QBM, T46QCM).
+6) Open product details: confirm tile ID, sensing date, cloud %, orbit.
+7) Download method: choose “Download” → SAFE package for each tile.
 
 ## Notes
 - Keep large rasters out of version control; `.gitignore` preserves folder structure via `.gitkeep`.
