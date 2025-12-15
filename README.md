@@ -87,6 +87,10 @@ pip install -r requirements.txt
   python src/indices/clip.py --input map/2017/ndvi_20171103.tif
   # or any map/<year>/<metric>_<yyyymmdd>.tif
   ```
+- Mosaic local SAFE band tiles with SCL masking:
+  ```bash
+  python src/preprocessing/make_mosaic_image.py --year 2018 --band B02 --output map/2018/S2_20181128_B02_10m.tif
+  ```
 
 ## Notes
 - Keep large rasters out of version control; `.gitignore` preserves folder structure via `.gitkeep`.
