@@ -15,3 +15,4 @@ tqdm
 requests
 sentinelsat
 earthengine-api
+geemap
