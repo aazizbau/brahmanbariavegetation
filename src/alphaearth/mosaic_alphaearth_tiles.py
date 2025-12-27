@@ -2,10 +2,15 @@
 Fast mosaic for AlphaEarth tiles using GDAL VRT + single gdalwarp (Brahmanbaria AOI).
 
 Example:
-    python src/alphaearth/mosaic_alphaearth_tiles.py \
-        --year 2017 \
-        --input-base map/2017/alphaearth/brahmanbaria_alphaearth_2017.tif \
-        --output map/2017/alphaearth/brahmanbaria_alphaearth_2017_mosaic.tif
+    python src/alphaearth/mosaic_alphaearth_tiles.py --year 2017 
+    --input-base map/2017/alphaearth/brahmanbaria_alphaearth_2017.tif 
+    --output map/2017/alphaearth/brahmanbaria_alphaearth_2017_mosaic.tif 
+    --gdal-cache-mb 512 
+    --tile-size 256 
+    --compress NONE 
+    --clean-tiles 
+    --skip-errors 
+    --overwrite
 
 Notes:
 - Requires GDAL command-line tools on PATH: gdalbuildvrt, gdalwarp.
